@@ -3,12 +3,29 @@
     <h1>BoolFix</h1>
     <input type="text" v-model="title">
     <button @click="search" @keydown.enter="search()">Search</button>
-      {{this.apiSearch}}
-    <ul v-for="film,k in films" :key="k">
-      <li v-for="title,i in film.titles" :key="i">{{title}}</li>
-      <li v-for="originalTitle,i in film.originalTitles" :key="'A'+ i">{{originalTitle}}</li>
-      <li v-for="language,i in film.languages" :key="'B'+ i">{{language}}</li>
-      <li v-for="vote,i in film.votes" :key="'C'+ i">{{vote}}</li>
+    <ul v-for="film,k in films" :key="'A' + k">
+      <li>{{film.title}}</li>
+      <li>{{film.original_title}}</li>
+      <li v-if="film.backdrop_path !== null"> <img :src="filmImgUrl + film.backdrop_path" alt="img"></li>
+      <li v-else>IMMAGINE ASSENTE</li>
+      <li v-if="film.original_language === 'en'"> <img src="../assets/inghilterra.png" alt="en-flag"> </li>
+      <li v-else-if="film.original_language === 'it'"> <img src="../assets/italia.png" alt="ita-flag"> </li>
+      <li v-else-if="film.original_language === 'es'"> <img src="../assets/spagna.png" alt="es-flag"> </li>
+      <li v-else-if="film.original_language === 'fr'"> <img src="../assets/francia.png" alt="fr-flag"> </li>
+      <li v-else>{{film.original_language}}</li>
+      <li>{{'voto'}}</li>
+    </ul>
+    <ul v-for="serie,i in tvSeries" :key="'B' + i">
+      <li>{{serie.name}}</li>
+      <li>{{serie.original_name}}</li>
+      <li v-if="serie.backdrop_path !== null"> <img :src="filmImgUrl + serie.backdrop_path" alt="img"></li>
+      <li v-else>IMMAGINE ASSENTE</li>
+      <li v-if="serie.original_language === 'en'"> <img src="../assets/inghilterra.png" alt="en-flag"> </li>
+      <li v-else-if="serie.original_language === 'it'"> <img src="../assets/italia.png" alt="ita-flag"> </li>
+      <li v-else-if="serie.original_language === 'es'"> <img src="../assets/spagna.png" alt="es-flag"> </li>
+      <li v-else-if="serie.original_language === 'fr'"> <img src="../assets/francia.png" alt="fr-flag"> </li>
+      <li v-else>{{serie.original_language}}</li>
+      <li>{{'voto'}}</li>
     </ul>
   </div>
 </template>
@@ -20,39 +37,41 @@ export default {
   data(){
     return{
       title:"",
-      apiSearch:"",
-      apiUrl:"https://api.themoviedb.org/3/search/movie?api_key=e99307154c6dfb0b4750f6603256716d&language=it-IT&query=",
-      films:[
-        {
-          titles:[],
-          originalTitles:[],
-          languages:[],
-          votes:[]
-        }
-      ]
+      apiFilmSearch:"",
+      apiTvSearch:"",
+      filmApiUrl:"https://api.themoviedb.org/3/search/movie?api_key=e99307154c6dfb0b4750f6603256716d&language=it-IT&query=",
+      seriesApiUrl:"https://api.themoviedb.org/3/search/tv?api_key=e99307154c6dfb0b4750f6603256716d&language=it_IT&query=",
+      films:[],
+      tvSeries:[],
+      filmImgUrl:"https://image.tmdb.org/t/p/w185"
     }
   },
   methods: {
     search(){
-      let apiSearch="";
-      apiSearch = this.apiUrl + this.title;
-      this.apiSearch = apiSearch;
+      let apiFilmSearch="";
+      let apiTvSearch="";
+
+      apiFilmSearch = this.filmApiUrl + this.title;
+      apiTvSearch = this.seriesApiUrl + this.title;
+
+      this.apiFilmSearch ="";
+      this.apiFilmSearch = apiFilmSearch;
       axios
-      .get(this.apiSearch)
+      .get(this.apiFilmSearch)
       .then((result)=>{
-        let risultato = result.data.results;
-        for(let i = 0; i < risultato.length ; i++){
-          
-            this.films.push(
-              this.films[i].titles.push(risultato[i].title),
-              this.films[i].originalTitles.push(risultato[i].original_title),
-              this.films[i].languages.push(risultato[i].original_language),
-              this.films[i].votes.push(risultato[i].vote_average)
-            )
-            console.log(this.films);
-          
-        }
+        this.films = result.data.results;
       });
+
+      this.apiTvSearch ="";   
+      this.apiTvSearch = apiTvSearch;
+      axios
+      .get(this.apiTvSearch)
+      .then((result)=>{
+        this.tvSeries = result.data.results;
+      });
+      
+    console.log(this.apiTvSearch);
+    console.log(this.apiFilmSearch);
     }
   }
 }
