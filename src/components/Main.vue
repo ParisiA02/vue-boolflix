@@ -61,6 +61,7 @@
               <i class="fas fa-star"></i>
               <i class="fas fa-star"></i>
             </li>
+            <li>Overview: {{overviews[k]}}</li>
           </ul>
         </div>
         <div class="card" v-for="serie,i in tvSeries" :key="'B' + i">
@@ -136,7 +137,8 @@ export default {
       films:[],
       tvSeries:[],
       filmImgUrl:"https://image.tmdb.org/t/p/w342",
-      votes: []
+      votes: [],
+      overviews: []
     }
   },
   methods: {
@@ -157,6 +159,8 @@ export default {
         for(let i=0; i < this.films.length; i++){
           tempVote.push(this.films[i].vote_average);
           this.votes.push(Math.ceil(tempVote[i]/2));
+
+          this.overviews.push(this.films[i].overview);
         }
       });
 
@@ -227,8 +231,8 @@ header{
     }
   
     .card{
-      width: calc(100%/6 - 40px);
-      height: 193px;
+      width: calc(100%/5 - 40px);
+      height: 500px;
       position: relative;
       border: 1px solid white;
       margin: 20px;
@@ -254,6 +258,7 @@ header{
         position: absolute;
         width: 100%;
         height: 100%;
+        object-position: center;
       }
 
       ul li{
