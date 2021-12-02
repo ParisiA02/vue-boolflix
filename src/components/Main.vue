@@ -1,8 +1,12 @@
 <template>
   <div class="container">
+  <header>
     <h1>BoolFix</h1>
-    <input type="text" v-model="title" @keydown.enter="search">
-    <button @click="search">Search</button>
+    <div class="search-container">
+      <input type="text" v-model="title" @keydown.enter="search">
+      <button @click="search">Search</button>
+    </div>
+  </header>
     <div class="card-container">
         <div class="card" v-for="film,k in films" :key="'A' + k">
           <div class="img-container" v-if="film.backdrop_path !== null"> <img :src="filmImgUrl + film.backdrop_path" alt="img"></div>
@@ -173,7 +177,35 @@ export default {
 
 @import '~@fortawesome/fontawesome-free/css/all.min.css';
 
+header{
+  width: 100%;
+  height: 75px;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h1{
+    margin-left: 50px;
+    color: red;
+  }
+
+  .search-container{
+    margin-right: 50px;
+
+    input{
+      height: 30px;
+      margin-right: 10px;
+    }
+
+    button{
+      padding: 5px;
+    }
+  }
+}
+
 .container{
+
   width: 100%;
   min-height: 100vh;
   background-color: rgb(54, 50, 50);
@@ -195,10 +227,11 @@ export default {
     }
   
     .card{
-      width: calc(100%/6);
+      width: calc(100%/6 - 40px);
       height: 193px;
       position: relative;
       border: 1px solid white;
+      margin: 20px;
   
       &:hover{
         background-color: black;
@@ -222,7 +255,7 @@ export default {
         width: 100%;
         height: 100%;
       }
-      
+
       ul li{
         position: relative;
         z-index: 2;
