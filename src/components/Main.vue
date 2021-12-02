@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <h1>BoolFix</h1>
-    <input type="text" v-model="title">
-    <button @click="search" @keydown.enter="search()">Search</button>
+    <input type="text" v-model="title" @keydown.enter="search">
+    <button @click="search">Search</button>
     <ul v-for="film,k in films" :key="'A' + k">
       <li>{{film.title}}</li>
       <li>{{film.original_title}}</li>
@@ -13,7 +13,49 @@
       <li v-else-if="film.original_language === 'es'"> <img src="../assets/spagna.png" alt="es-flag"> </li>
       <li v-else-if="film.original_language === 'fr'"> <img src="../assets/francia.png" alt="fr-flag"> </li>
       <li v-else>{{film.original_language}}</li>
-      <li>{{'voto'}}</li>
+      <li v-if="votes[k] === 0">
+        <i class="far fa-star"></i>
+        <i class="far fa-star"></i>
+        <i class="far fa-star"></i>      
+        <i class="far fa-star"></i>
+        <i class="far fa-star"></i>
+      </li>
+      <li v-else-if="votes[k] === 1">
+        <i class="fas fa-star"></i>
+        <i class="far fa-star"></i>
+        <i class="far fa-star"></i>      
+        <i class="far fa-star"></i>
+        <i class="far fa-star"></i>
+      </li>
+      <li v-else-if="votes[k] === 2">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="far fa-star"></i>      
+        <i class="far fa-star"></i>
+        <i class="far fa-star"></i>
+      </li>
+      <li v-else-if="votes[k] === 3">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>      
+        <i class="far fa-star"></i>
+        <i class="far fa-star"></i>
+      </li>
+      <li v-else-if="votes[k] === 4">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>      
+        <i class="fas fa-star"></i>
+        <i class="far fa-star"></i>
+      </li>
+      <li v-else-if="votes[k] === 5">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>      
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+      </li>
+
     </ul>
     <ul v-for="serie,i in tvSeries" :key="'B' + i">
       <li>{{serie.name}}</li>
@@ -25,7 +67,48 @@
       <li v-else-if="serie.original_language === 'es'"> <img src="../assets/spagna.png" alt="es-flag"> </li>
       <li v-else-if="serie.original_language === 'fr'"> <img src="../assets/francia.png" alt="fr-flag"> </li>
       <li v-else>{{serie.original_language}}</li>
-      <li>{{'voto'}}</li>
+      <li v-if="votes[i] === 0">
+        <i class="far fa-star"></i>
+        <i class="far fa-star"></i>
+        <i class="far fa-star"></i>      
+        <i class="far fa-star"></i>
+        <i class="far fa-star"></i>
+      </li>
+      <li v-else-if="votes[i] === 1">
+        <i class="fas fa-star"></i>
+        <i class="far fa-star"></i>
+        <i class="far fa-star"></i>      
+        <i class="far fa-star"></i>
+        <i class="far fa-star"></i>
+      </li>
+      <li v-else-if="votes[i] === 2">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="far fa-star"></i>      
+        <i class="far fa-star"></i>
+        <i class="far fa-star"></i>
+      </li>
+      <li v-else-if="votes[i] === 3">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>      
+        <i class="far fa-star"></i>
+        <i class="far fa-star"></i>
+      </li>
+      <li v-else-if="votes[i] === 4">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>      
+        <i class="fas fa-star"></i>
+        <i class="far fa-star"></i>
+      </li>
+      <li v-else-if="votes[i] === 5">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>      
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+      </li>
     </ul>
   </div>
 </template>
@@ -43,13 +126,15 @@ export default {
       seriesApiUrl:"https://api.themoviedb.org/3/search/tv?api_key=e99307154c6dfb0b4750f6603256716d&language=it_IT&query=",
       films:[],
       tvSeries:[],
-      filmImgUrl:"https://image.tmdb.org/t/p/w185"
+      filmImgUrl:"https://image.tmdb.org/t/p/w300",
+      votes: []
     }
   },
   methods: {
     search(){
       let apiFilmSearch="";
       let apiTvSearch="";
+      let tempVote=[];
 
       apiFilmSearch = this.filmApiUrl + this.title;
       apiTvSearch = this.seriesApiUrl + this.title;
@@ -60,6 +145,10 @@ export default {
       .get(this.apiFilmSearch)
       .then((result)=>{
         this.films = result.data.results;
+        for(let i=0; i < this.films.length; i++){
+          tempVote.push(this.films[i].vote_average);
+          this.votes.push(Math.ceil(tempVote[i]/2));
+        }
       });
 
       this.apiTvSearch ="";   
@@ -69,9 +158,6 @@ export default {
       .then((result)=>{
         this.tvSeries = result.data.results;
       });
-      
-    console.log(this.apiTvSearch);
-    console.log(this.apiFilmSearch);
     }
   }
 }
