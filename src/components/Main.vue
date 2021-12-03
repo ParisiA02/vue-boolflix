@@ -9,7 +9,7 @@
   </header>
     <div class="card-container">
         <div class="card" v-for="film,k in films" :key="'A' + k">
-          <div class="img-container" v-if="film.backdrop_path !== null"> <img :src="filmImgUrl + film.backdrop_path" alt="img"></div>
+          <div class="img-container" v-if="film.poster_path !== null"> <img :src="filmImgUrl + film.poster_path" alt="img"></div>
           <div v-else> <img class="default-img" src="../assets/film.png" alt="default-film-img"></div>
           <ul>
             <li>Titolo: {{film.title}}</li>
@@ -19,53 +19,19 @@
             <li v-else-if="film.original_language === 'es'"> Lingua: <img class="img-lingua" src="../assets/spagna.png" alt="es-flag"> </li>
             <li v-else-if="film.original_language === 'fr'"> Lingua: <img class="img-lingua" src="../assets/francia.png" alt="fr-flag"> </li>
             <li v-else>Lingua: {{film.original_language}}</li>
-            <li v-if="votes[k] === 0">
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-            </li>
-            <li v-else-if="votes[k] === 1">
-              <i class="fas fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-            </li>
-            <li v-else-if="votes[k] === 2">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-            </li>
-            <li v-else-if="votes[k] === 3">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-            </li>
-            <li v-else-if="votes[k] === 4">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="far fa-star"></i>
-            </li>
-            <li v-else-if="votes[k] === 5">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </li>
+            <ul class="star-container">
+              <li v-for="vote,j in votes" :key="'J'+j">
+                <span v-if="j < 5">
+                  <span v-if="j < votes[k]"><i class="fas fa-star"></i></span>
+                  <span v-else><i class="far fa-star"></i></span>
+                </span>
+              </li>
+            </ul>
             <li>Overview: {{overviews[k]}}</li>
           </ul>
         </div>
         <div class="card" v-for="serie,i in tvSeries" :key="'B' + i">
-          <div class="img-container" v-if="serie.backdrop_path !== null"> <img :src="filmImgUrl + serie.backdrop_path" alt="img"></div>
+          <div class="img-container" v-if="serie.poster_path !== null"> <img :src="filmImgUrl + serie.poster_path" alt="img"></div>
           <div v-else> <img class="default-img" src="../assets/tvserie.png" alt="default-serie-img"></div>
           <ul>
             <li>Titolo: {{serie.name}}</li>
@@ -75,48 +41,15 @@
             <li v-else-if="serie.original_language === 'es'"> Lingua: <img class="img-lingua" src="../assets/spagna.png" alt="es-flag"> </li>
             <li v-else-if="serie.original_language === 'fr'"> Lingua: <img class="img-lingua" src="../assets/francia.png" alt="fr-flag"> </li>
             <li v-else>Lingua: {{serie.original_language}}</li>
-            <li v-if="votes[i] === 0">
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-            </li>
-            <li v-else-if="votes[i] === 1">
-              <i class="fas fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-            </li>
-            <li v-else-if="votes[i] === 2">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-            </li>
-            <li v-else-if="votes[i] === 3">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="far fa-star"></i>
-              <i class="far fa-star"></i>
-            </li>
-            <li v-else-if="votes[i] === 4">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="far fa-star"></i>
-            </li>
-            <li v-else-if="votes[i] === 5">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </li>
+            <ul class="star-container">
+              <li v-for="vote,j in votes" :key="'J'+j">
+                <span v-if="j < 5">
+                  <span v-if="j < votes[i]"><i class="fas fa-star"></i></span>
+                  <span v-else><i class="far fa-star"></i></span>
+                </span>
+              </li>
+            </ul>
+            <li>Overview: {{overviews[i]}}</li>
           </ul>
         </div>
     </div>
@@ -156,10 +89,11 @@ export default {
       .get(this.apiFilmSearch)
       .then((result)=>{
         this.films = result.data.results;
+        this.votes = [];
+        this.overviews = [];
         for(let i=0; i < this.films.length; i++){
           tempVote.push(this.films[i].vote_average);
           this.votes.push(Math.ceil(tempVote[i]/2));
-
           this.overviews.push(this.films[i].overview);
         }
       });
@@ -236,6 +170,7 @@ header{
       position: relative;
       border: 1px solid white;
       margin: 20px;
+      overflow: auto;
   
       &:hover{
         background-color: black;
@@ -251,14 +186,21 @@ header{
         ul li{
           display: block;
           margin: 10px 0 0 10px;
+
         }
+          ul{
+            margin-top: 10px;
+          }
+          ul.star-container li{
+            display: inline;
+            color: gold;
+          }
       }
   
       img{
         position: absolute;
         width: 100%;
         height: 100%;
-        object-position: center;
       }
 
       ul li{
